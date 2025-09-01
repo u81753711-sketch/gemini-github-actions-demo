@@ -1,5 +1,6 @@
 name: Gemini AI Integration
 
+
 on:
   push:
     branches: [ main ]
@@ -21,12 +22,13 @@ jobs:
     
     - name: Install Gemini CLI
       run: |
-        npm install -g @google/generative-ai-cli
-    
+          curl -sSL https://sdk.cloud.google.com | bash
+                    source ~/.bashrc
+                              gcloud components install beta
+                                        pip install google-generativeai
     - name: Configure Gemini CLI
-      run: |
-        mkdir -p ~/.gemini
-        echo '{"apiKey": "${{ secrets.GEMINI_API_KEY }}"}'> ~/.gemini/settings.json
+          python -c "import google.generativeai as genai; genai.configure(api_key='${{ secrets.GEMINI_API_KEY }}'); model = genai.GenerativeModel('gemini-pro'); response = model.generate_content('Hello from GitHub Actions!'); print(response.text)"          echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> $GITHUB_ENV
+                    python -c "import google.generativeai as genai; print('Gemini API configured successfully')"          python -c "import google.generativeai as genai; print('Gemini API configured successfully')"echo '{"apiKey": "${{ secrets.GEMINI_API_KEY }}"}'> ~/.gemini/settings.json
     
     - name: Test Gemini AI
       run: |
