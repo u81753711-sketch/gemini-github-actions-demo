@@ -1,0 +1,37 @@
+name: Gemini AI Integration
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  gemini-ai-task:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+    
+    - name: Install Gemini CLI
+      run: |
+        npm install -g @google/generative-ai-cli
+    
+    - name: Configure Gemini CLI
+      run: |
+        mkdir -p ~/.gemini
+        echo '{"apiKey": "${{ secrets.GEMINI_API_KEY }}"}'> ~/.gemini/settings.json
+    
+    - name: Test Gemini AI
+      run: |
+        echo 'Hello from GitHub Actions! Please confirm this workflow is working.' | gemini
+    
+    - name: Generate AI Summary
+      run: |
+        echo 'Please provide a brief summary of what this GitHub Actions workflow does.' | gemini
